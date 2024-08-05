@@ -1,0 +1,32 @@
+/* Home.css */
+.home-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.screen {
+    padding: 20px;
+    height: 100vh;
+}
+
+h2 {
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background: #f4f4f4;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+p {
+    font-size: 18px;
+    color: #555;
+}
