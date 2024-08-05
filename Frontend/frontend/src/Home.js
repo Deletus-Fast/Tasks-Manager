@@ -52,7 +52,7 @@ const Home = ({ user }) => {
   return (
       <>
       <Header />
-      <div class="screen">
+      <div className="screen">
         <h2>Dashboard</h2>
         {/* {tasks ? (TasksTable(tasks) ) : <p>Loading</p>   }  */}
 

@@ -61,7 +61,8 @@ const Tasks = ({ user }) => {
     return (
         <>
             <Header />
-            <div class="screen">
+            <div className="screen1">
+            {/* <div className="screen"> */}
                 <h2>Tasks</h2>
                 {/* filters - use dropdown for pending, in-progress and completed */}
                 < select onChange={handleStatus} value={status}>
@@ -75,6 +76,7 @@ const Tasks = ({ user }) => {
                 <AddTask />
                 <br />
                 {TasksTable(filteredTasks)}
+            {/* </div> */}
             </div>
         </>
     );

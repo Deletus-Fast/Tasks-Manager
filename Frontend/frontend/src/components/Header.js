@@ -16,7 +16,7 @@ export default function Header() {
                 </Typography>
                 <Button color="inherit" component={Link} to="/">Home</Button>
                 <Button color="inherit" component={Link} to="/tasks">Tasks</Button>
-                <Button color="inherit" component={Link} to="/another-page">Another Page</Button>
+                <Button color="inherit" component={Link} to="/taskdetails">Task Details</Button>
             </Toolbar>
         </AppBar>
     );

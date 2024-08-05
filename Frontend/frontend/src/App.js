@@ -4,6 +4,7 @@ import Login from './login';
 import Home from './Home';
 import Tasks from './Tasks';
 import Footer from './components/Footer';
+import TaskDetails from './TaskDetails';
 
 const App = () => {
     const [user, setUser] = useState([]);
@@ -11,12 +12,11 @@ const App = () => {
       <>
         <Router>
             <div>
-                {/* Add Navbar component here */}
                 <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/" element={user ? <Home user={user} /> : <Navigate to="/login" />} />
                     <Route path="/Tasks" element={<Tasks/>} />
-                    {/* Add other routes here */}
+                    <Route path="/TaskDetails" element={<TaskDetails/>} />
                 </Routes>
             </div>
         </Router>

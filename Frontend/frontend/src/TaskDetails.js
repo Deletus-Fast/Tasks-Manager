@@ -1,90 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
+// import CircularProgress from '@material-ui/core/CircularProgress';
 import './TaskDetails.css';
+import Header from './components/Header';
 
-const TaskDetails = () => {
-    const { id } = useParams();
+const TaskDetails = ({ user }) => {
+    const [tasks, setTasks] = useState([]);
     const [task, setTask] = useState(null);
+    const [index, setIndex] = useState(0);
     // const [loading, setLoading] = useState(false);
     // const [description, setDescription] = useState('');
+    user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
-        const fetchTask = async () => {
+        const fetchTasks = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await axios.get(`http://localhost:3001/tasks/${id}`, {
+                const response = await axios.get('http://localhost:3001/tasks', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setTask(response.data);
-                setDescription(response.data.description || '');
+                const userTasks = response.data.filter(task => task.userId === user.ID);
+                setTasks(userTasks);
+                setTask(userTasks[0]);
             } catch (err) {
                 console.error(err);
             }
         };
-        fetchTask();
-    }, [id]);
+        fetchTasks();
+    }, []);
 
-    const handleStatusToggle = async () => {
-        if (task) {
-            const newStatus = task.status === 'In Progress' ? 'Completed' : 'In Progress';
-            if(newStatus === 'Pending') {
-                newStatus = 'In Progress';
-            }
-            try {
-                const token = localStorage.getItem('token');
-                await axios.put(`http://localhost:3001/tasks/${id}`, { status: newStatus }, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                task.status = newStatus;
-            } catch (err) {
-                console.error(err);
-            }
+    const handleNext = () => {
+        if (tasks.length > 0) {
+            const newIndex = (index + 1) % tasks.length;
+            setIndex(newIndex);
+            setTask(tasks[newIndex]);
         }
     };
 
-    // const handleGenerateDescription = async () => {
-    //     if (!description) {
-    //         setLoading(true);
-    //         try {
-    //             const token = localStorage.getItem('token');
-    //             const response = await axios.post('http://localhost:3001/tasks/generate', { title: task.title }, {
-    //                 headers: { Authorization: `Bearer ${token}` }
-    //             });
-    //             setDescription(response.data.description);
-    //         } catch (err) {
-    //             console.error(err);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     }
-    // };
+    const handlePrevious = () => {
+        if (tasks.length > 0) {
+            const newIndex = (index - 1 + tasks.length) % tasks.length;
+            setIndex(newIndex);
+            setTask(tasks[newIndex]);
+        }
+    }
 
     if (!task) return <div>Loading...</div>;
 
     return (
-        <div>
-            <h2>Task Details</h2>
-            <p><strong>Title:</strong> {task.title}</p>
-            <p><strong>Description:</strong>{task.description}</p>
-            {/* <div className="result-container">
-                {loading ? (
-                    <div className="loader-container">
-                        <CircularProgress />
-                    </div>
-                ) : (
-                    <p>{description}</p>
-                )}
+        <>
+            <Header />
+            <div className='screen'>
+                <h2>Task Details</h2>
+                <p><strong>Title:</strong> {task.title}</p>
+                <p><strong>Description:</strong> {task.description}</p>
+                {/* <div className="result-container">
+                    {loading ? (
+                        <div className="loader-container">
+                            <CircularProgress />
+                        </div>
+                    ) : (
+                        <p>{description}</p>
+                    )}
+                </div>
+                <button onClick={handleGenerateDescription} disabled={description}>
+                    Generate
+                </button> */}
+                <p><strong>Status:</strong> {task.status}</p>
+                <p><strong>Due Date:</strong> {task.dueDate.substring(0, 10)}</p>
+                <button onClick={handlePrevious}>Previous</button>
+                <button onClick={handleNext}>Next</button>
             </div>
-            <button onClick={handleGenerateDescription} disabled={description}>
-                Generate
-            </button> */}
-            
-            <button onClick={handleStatusToggle}>
-                {task.status === 'In Progress' ? 'Mark as Completed' : 'Mark as In Progress'}
-            </button>
-        </div>
+        </>
     );
 };
 
